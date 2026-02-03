@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>I'm Sorry Kaaju ❤️</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffe4e1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            z-index: 100;
+            position: relative;
+        }
+
+        h1 { color: #d63384; margin-bottom: 10px; font-size: 24px; }
+        p { color: #666; font-size: 17px; line-height: 1.5; margin-bottom: 20px; }
+
+        .gif-container {
+            width: 100%;
+            height: 160px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .gif-container img {
+            height: 100%;
+            border-radius: 15px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            min-height: 50px;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.1s ease;
+        }
+
+        #yesBtn { background-color: #ff4d6d; color: white; }
+        #noBtn { background-color: #ced4da; color: #495057; position: relative; }
+
+        /* The moving apology notes */
+        #note {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #ff758f;
+            font-weight: 600;
+            min-height: 20px;
+        }
+
+        #success { display: none; }
+        .extra-sweet { font-style: italic; color: #ff4d6d; margin-top: 10px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div id="askPage">
+            <div class="gif-container">
+                <img src="https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif">
+            </div>
+            <h1>I'm really sorry, Kaaju... 🥺</h1>
+            <p>I acted like a jerk the other day. I promise to make it up to you. Bacha smjh ke maaf kar de yrr. I really love you aage se esa ho na to meri khal utar diyo. Will you please forgive me?</p>
+            
+            <div class="btn-group">
+                <button id="yesBtn">Yes</button>
+                <button id="noBtn">No</button>
+            </div>
+            <div id="note"></div>
+        </div>
+
+        <div id="success">
+            <div class="gif-container">
+                <img src="https://media.giphy.com/media/3o6Zt6KHxJTbXCnSvu/giphy.gif">
+            </div>
+            <h1>Yay! I love you, Kaaju! ❤️</h1>
+            <p>You’re the best thing that ever happened to me. Thank you for being so patient and wonderful. <span class="extra-sweet">I'll improve babes kasam se! 💋. And yup Love you mero dikro
+ your bacha.</span></p>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const askPage = document.getElementById('askPage');
+        const successPage = document.getElementById('success');
+        const note = document.getElementById('note');
+
+        const smallApologies = [
+            "Wait, Kaaju! Don't click that! 🥺",
+            "I'll buy you chocolate! 🍫",
+            "Pleeaaaseeee? ❤️",
+            "I'll give you a million hugs!",
+            "I promise to be extra good! ✨",
+            "Look at the Yes button instead!",
+            "I miss you so much! 🌹"
+        ];
+        let noteIndex = 0;
+
+        function moveButton() {
+            noBtn.style.position = 'fixed';
+
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+
+            // Stay within screen bounds
+            const maxX = window.innerWidth - btnWidth - 20;
+            const maxY = window.innerHeight - btnHeight - 20;
+
+            const yesRect = yesBtn.getBoundingClientRect();
+
+            let randomX, randomY;
+            let attempts = 0;
+
+            do {
+                randomX = Math.floor(Math.random() * maxX);
+                randomY = Math.floor(Math.random() * maxY);
+                attempts++;
+            } while (
+                // Avoid landing on the Yes button
+                randomX < yesRect.right + 50 && 
+                randomX + btnWidth > yesRect.left - 50 && 
+                randomY < yesRect.bottom + 50 && 
+                randomY + btnHeight > yesRect.top - 50 &&
+                attempts < 20
+            );
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            // Show a small note every time
+            note.innerText = smallApologies[noteIndex];
+            noteIndex = (noteIndex + 1) % smallApologies.length;
+        }
+
+        // Desktop Hover
+        noBtn.addEventListener('mouseover', moveButton);
+
+        // Mobile Touch (Fixes "catching" the button)
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
+
+        // Yes Button
+        yesBtn.addEventListener('click', () => {
+            askPage.style.display = 'none';
+            successPage.style.display = 'block';
+            noBtn.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
